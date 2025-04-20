@@ -10,6 +10,11 @@ const routes : Array<RouteRecordRaw> = [
                 path: 'index',
                 name: 'FrontIndex',
                 component: () => import('../views/front/index.vue')
+            },
+            {
+                path: 'goods/:id',//需传入商品的id访问
+                name: 'FrontGoods',
+                component: () => import('../views/front/goods.vue')
             }
         ]
     },
@@ -52,6 +57,15 @@ const routes : Array<RouteRecordRaw> = [
                 component: () => import('../views/mis/user.vue'),
                 meta: {
                     title: '用户管理',
+                    isTab: true
+                }
+            },
+            {
+                path:'goods',
+                name:'MisGoods',
+                component: () => import('../views/mis/goods.vue'),
+                meta: {
+                    title: '体检套餐',
                     isTab: true
                 }
             }

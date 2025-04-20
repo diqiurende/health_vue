@@ -27,7 +27,7 @@ const data=reactive({
 
 //弹窗
 const dialog = reactive({
-  visible: true,
+  visible: false,
   update: false,//标志位
   dataForm: {
     id: null,
@@ -135,10 +135,7 @@ function searchHandle(){
    });
 }
 
-//新增用户
-function  addHandle(){
 
-}
 
 //改变分页逻辑函数
 
@@ -152,6 +149,175 @@ function sizeChangeHandle(val){
 function  currentChangeHandle(val){
   data.pageIndex=val;
   loadDataList();
+}
+
+
+//新增用户
+function  addHandle(){
+  //新增用户不需要主键值 以免之前修改的主键值影响
+  dialog.dataForm.id=null;
+  dialog.update=false;
+  dialog.visible=true;//显示弹窗
+  proxy.$nextTick(()=>{//等到 DOM 更新完成之后再执行回调函数-重置表单字段
+    proxy.$refs['dialogForm'].resetFields();
+  });
+}
+//dialog里的确认按钮绑定提交事件
+function dataFormSubmit(){
+  //首先验证表单字段
+  proxy.$refs['dialogForm'].validate(valid => {
+    if(valid){
+      let json={
+        userId: dialog.dataForm.id,
+        username: dialog.dataForm.username,
+        password: dialog.dataForm.password,
+        name: dialog.dataForm.name,
+        sex: dialog.dataForm.sex,
+        tel: dialog.dataForm.tel,
+        email: dialog.dataForm.email,
+        //将日期 dialog.dataForm.hiredate 格式化成字符串 "YYYY-MM-DD" 的形式（如 2025-04-14）
+        hiredate: dayjs(dialog.dataForm.hiredate).format('YYYY-MM-DD'),
+        role: dialog.dataForm.role,
+        deptId: dialog.dataForm.deptId,
+        status: dialog.dataForm.status
+      };
+      console.log(json);
+      //根据dialog的id字段判断当前操作 为null就是insert 否则就是更新操作
+      proxy.$http(`/mis/user/${dialog.dataForm.id==null?'insertUser':'update'}`, 'POST',json,true,function (resp){
+        if(resp.rows==1){
+          proxy.$message({
+            message:'操作成功',
+            type:"success",
+            duration: 2000,
+            onClose: () => {
+              dialog.visible=false;
+              loadDataList();
+            }
+          });
+        }else {
+          proxy.$message({
+            message:'操作失败',
+            type:'error',
+            duration: 2000
+          });
+        }
+      });
+    }
+  });
+}
+
+//修改
+function updateHandle(id){
+  //修改标志位为更新 保存当前userid 显示弹窗
+  dialog.dataForm.id=id;
+  dialog.update=true;
+  dialog.visible=true;
+  proxy.$nextTick(()=>{
+    let json={
+      userId: dialog.dataForm.id
+    };
+    proxy.$http('/mis/user/searchById','POST',json,true,function (resp){
+      let result = resp.result;
+      dialog.dataForm.username = result.username;
+      dialog.dataForm.name = result.name;
+      dialog.dataForm.sex = result.sex;
+      dialog.dataForm.tel = result.tel;
+      dialog.dataForm.email = result.email;
+      dialog.dataForm.hiredate = result.hiredate;
+      dialog.dataForm.role = JSON.parse(result.role);
+      dialog.dataForm.deptId = result.deptId;
+      dialog.dataForm.status = result.status;
+    })
+  })
+}
+
+
+//删除复选框的规则 避免删除管理员账户
+function selectable(row,index){
+
+  let temp=row.roles.split("，");
+  if(temp.includes("超级管理员")){
+    return false;
+  }
+  return true;
+}
+
+//每次勾选或者取消都会触发
+function selectionChangeHandle(val){
+   data.selections=val;
+}
+
+//删除函数
+function deleteHandle(id) {
+  //适用于批量删除或者单条删除
+  let ids = id ? [id] : data.selections.map(item => {
+    return item.id;
+  });//前者单删为封装一个id到ids数组 后者为将selection里的id封装为ids数组
+  if (ids.length == 0) {
+    proxy.$message({
+      message: '没有选中记录',
+      type: 'warning',
+      duration: 1200
+    });
+  } else {
+    proxy.$confirm('确定要删除所选中的数据？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+        .then(() => {
+          let json = {
+            ids: ids
+          };
+          proxy.$http('/mis/user/deleteUserByIds', 'POST', json, true, function (resp) {
+            if (resp.rows > 0) {
+              proxy.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1200,
+                onClose: () => {
+                  loadDataList();
+                }
+              })
+            } else {
+              proxy.$message({
+                message: '未能删除记录',
+                type: 'warning',
+                duration: 1200
+              });
+            }
+          });
+        });
+  }
+}
+
+//离职函数
+function  dismissHandle(id){
+  proxy.$confirm(`确定设置该用户为离职状态？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    let json = { userId: id }
+    proxy.$http('/mis/user/dismiss', 'POST', json, true, function (resp) {
+      if (resp.rows == 1) {
+        proxy.$message({
+          message: '操作成功',
+          type: 'success',
+          duration: 1200,
+          onClose: () => {
+            loadDataList();//重新加载页面
+          }
+        });
+      } else {
+        proxy.$message({
+          message: '操作失败',
+          type: 'warning',
+          duration: 1200
+        });
+      }
+    });
+  });
 }
 </script>
 
@@ -209,7 +375,7 @@ function  currentChangeHandle(val){
               :header-cell-style="{'background':'#f5f7fa'}" border
               v-loading="data.loading" @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center"
-                       align="center" width="50" />
+                       :selectable="selectable" align="center" width="50" />
       <el-table-column type="index" header-align="center" align="center"
                        width="100" label="序号">
         <template #default="scope">
@@ -263,7 +429,7 @@ function  currentChangeHandle(val){
   <el-dialog
      :title="!dialog.dataForm.id ? '新增':'修改'"
       :close-on-click-modal="false" v-model="dialog.visible" width="450px">
-    <el-form :model="dialog.dataForm" ref="dialogFrom"
+    <el-form :model="dialog.dataForm" ref="dialogForm"
       :rules="dialog.dataRule" label-width="80px">
 
       <el-form-item label="用户名" prop="username">
