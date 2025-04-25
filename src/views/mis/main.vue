@@ -5,9 +5,9 @@
        v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中">
     <nav class="site-navbar"
          :class="{ 'site-navbar--fold': sidebar.sidebarFold }">
-      <div class="site-navbar__header">
+      <div class="site-navbar__header" @click="router.push({name:'FrontIndex'})">
         <h1 class="site-navbar__brand">
-          <a class="site-navbar__brand-lg">神州大健康体检系统</a>
+          <a class="site-navbar__brand-lg">华夏健康卫士</a>
           <a class="site-navbar__brand-mini">体检</a>
         </h1>
       </div>
@@ -109,15 +109,15 @@
               </el-icon>
               <span slot="title">促销规则</span>
             </el-menu-item>
-            <el-menu-item index="MisCustomer"
-                          v-if="proxy.isAuth(['ROOT', 'CUSTOMER:SELECT'])"
-                          @click="$router.push({ name: 'MisCustomer' })">
-              <el-icon>
-                <SvgIcon name="customer_fill"
-                         class="icon-svg" />
-              </el-icon>
-              <span slot="title">客户档案</span>
-            </el-menu-item>
+<!--            <el-menu-item index="MisCustomer"-->
+<!--                          v-if="proxy.isAuth(['ROOT', 'CUSTOMER:SELECT'])"-->
+<!--                          @click="$router.push({ name: 'MisCustomer' })">-->
+<!--              <el-icon>-->
+<!--                <SvgIcon name="customer_fill"-->
+<!--                         class="icon-svg" />-->
+<!--              </el-icon>-->
+<!--              <span slot="title">客户档案</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="MisOrder"
                           v-if="proxy.isAuth(['ROOT', 'ORDER:SELECT'])"
                           @click="$router.push({ name: 'MisOrder' })">
@@ -128,11 +128,11 @@
             </el-menu-item>
             <el-menu-item index="MisCustomerIm"
                           v-if="proxy.isAuth(['ROOT', 'CUSTOMER_IM:SELECT'])"
-                          @click="$router.push({ name: 'MisCustomerIm' })">
+                          @click="$router.push({ name: 'MisChat' })">
               <el-icon>
                 <SvgIcon name="im_fill" class="icon-svg" />
               </el-icon>
-              <span slot="title">客服IM</span>
+              <span slot="title">智能问诊</span>
             </el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="体检管理"
@@ -160,17 +160,9 @@
               </el-icon>
               <span slot="title">体检签到</span>
             </el-menu-item>
-            <el-menu-item index="MisAppointmentRestriction"
-                          v-if="proxy.isAuth(['ROOT', 'APPOINTMENT_RESTRICTION:SELECT'])"
-                          @click="$router.push({ name: 'MisAppointmentRestriction' })">
-              <el-icon>
-                <SvgIcon name="setting_fill" class="icon-svg" />
-              </el-icon>
-              <span slot="title">预约设置</span>
-            </el-menu-item>
-            <el-menu-item index="MisCheckup"
+            <el-menu-item index="MisDoctorCheckup"
                           v-if="proxy.isAuth(['ROOT', 'CHECKUP:SELECT'])"
-                          @click="$router.push({ name: 'MisCheckup' })">
+                          @click="$router.push({ name: 'MisDoctorCheckup' })">
               <el-icon>
                 <SvgIcon name="doctor_fill" class="icon-svg" />
               </el-icon>
@@ -183,24 +175,6 @@
                 <SvgIcon name="file_fill" class="icon-svg" />
               </el-icon>
               <span slot="title">体检报告</span>
-            </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="系统设置"
-                       :popper-class="'site-sidebar--' + sidebar.sidebarLayoutSkin + '-popper'"
-                       v-if="proxy.isAuth(['ROOT', 'SYSTEM:SELECT'])">
-            <template #title>
-              <el-icon>
-                <SvgIcon name="system_fill" class="icon-svg" />
-              </el-icon>
-              <span slot="title">系统设置</span>
-            </template>
-            <el-menu-item index="MisFlowRegulation"
-                          v-if="proxy.isAuth(['ROOT', 'FLOW_REGULATION:SELECT'])"
-                          @click="$router.push({ name: 'MisFlowRegulation' })">
-              <el-icon>
-                <SvgIcon name="people_fill" class="icon-svg" />
-              </el-icon>
-              <span slot="title">人员限流</span>
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
@@ -217,7 +191,7 @@
 
           <el-tab-pane v-for="item in siteContent.mainTabs"
                        :label="item.title" :name="item.name">
-            <el-card :body-style="siteContent.siteContentViewHeight">
+            <el-card :body-style="siteContent.siteContentViewHeight" style="max-width: 84%; ">
               <router-view :key="router.currentRoute.value.query.random" />
             </el-card>
           </el-tab-pane>

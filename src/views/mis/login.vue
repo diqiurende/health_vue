@@ -8,7 +8,7 @@
       </div>
       <div class="right">
         <div class="title-container">
-          <h2>神州大健康体检系统</h2>
+          <h2>华夏健康卫士体检系统</h2>
           <span>V1.0</span>
         </div>
         <div v-if="!qr.qrCodeVisible">

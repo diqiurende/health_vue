@@ -15,7 +15,47 @@ const routes : Array<RouteRecordRaw> = [
                 path: 'goods/:id',//需传入商品的id访问
                 name: 'FrontGoods',
                 component: () => import('../views/front/goods.vue')
-            }
+            },
+            {
+                path: 'goods_list',
+                name: 'FrontGoodsList',
+                component: () => import('../views/front/goods_list.vue')
+            },
+            {
+                path: 'customer',
+                name: 'FrontCustomer',
+                component: () => import('../views/front/customer.vue'),
+                children: [
+
+                ]
+            },
+            {
+                path: 'customer',
+                name: 'FrontCustomer',
+                component: () => import('../views/front/customer.vue'),
+                children: [
+                    {
+                        path: 'mine',
+                        name: 'FrontMine',
+                        component: () => import('../views/front/mine.vue')
+                    },
+                    {
+                        path: 'order_list',
+                        name: 'FrontOrderList',
+                        component: () => import('../views/front/order_list.vue')
+                    },
+                    {
+                        path: 'appointment_list',
+                        name: 'FrontAppointmentList',
+                        component: () => import('../views/front/appointment_list.vue')
+                    }
+                ]
+            },
+            {
+                path: 'goods_snapshot/:id/:mode',
+                name: 'FrontGoodsSnapshot',
+                component: () => import('../views/front/goods_snapshot.vue')
+            },
         ]
     },
 
@@ -68,7 +108,70 @@ const routes : Array<RouteRecordRaw> = [
                     title: '体检套餐',
                     isTab: true
                 }
-            }
+            },
+            {
+                path: 'order',
+                name: 'MisOrder',
+                component: () => import('../views/mis/order.vue'),
+                meta: {
+                    title: '订单管理',
+                    isTab: true
+                }
+            },
+            {
+                path: 'rule',
+                name: 'MisRule',
+                component: () => import('../views/mis/rule.vue'),
+                meta: {
+                    title: '促销规则',
+                    isTab: true
+                }
+            },
+            {
+                path: 'appointment',
+                name: 'MisAppointment',
+                component: () => import('../views/mis/appointment.vue'),
+                meta: {
+                    title: '体检预约',
+                    isTab: true
+                }
+            },
+            {
+                path: 'customer_checkin',
+                name: 'MisCustomerCheckin',
+                component: () => import('../views/mis/customer_checkin.vue'),
+                meta: {
+                    title: '体检签到',
+                    isTab: true
+                }
+            },
+            {
+                path: 'checkup',
+                name: 'MisDoctorCheckup',
+                component: () => import('../views/mis/doctor_checkup.vue'),
+                meta: {
+                    title: '医生检查',
+                    isTab: true
+                }
+            },
+            {
+                path: 'checkup_report',
+                name: 'MisCheckupReport',
+                component: () => import('../views/mis/checkup_report.vue'),
+                meta: {
+                    title: '体检报告',
+                    isTab: true
+                }
+            },
+            {
+                path: 'chat',
+                name: 'MisChat',
+                component: () => import('../views/mis/ChatPanel.vue'),
+                meta: {
+                    title: '医疗AI机器人',
+                    isTab: true
+                }
+            },
         ]
     },
     {

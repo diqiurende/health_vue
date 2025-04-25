@@ -666,6 +666,17 @@ function deleteHandle(id) {
     });
   }
 }
+
+//预览函数
+function viewHandle(id) {
+  //带id跳转到商品预览页面
+  router.push({
+    name: 'FrontGoods',
+    params: {
+      id: id
+    }
+  });
+}
 </script>
 
 <template>
