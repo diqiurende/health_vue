@@ -38,11 +38,11 @@ active = ref(name);
           </el-icon>
           <span>体检预约</span>
         </el-menu-item>
-        <el-menu-item index="FrontCustomerIm">
+        <el-menu-item index="MisChat">
           <el-icon>
             <Collection />
           </el-icon>
-          <span>客服咨询</span>
+          <span>智能问诊</span>
         </el-menu-item>
       </el-menu>
       <div class="content"><router-view /></div>

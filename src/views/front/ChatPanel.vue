@@ -24,7 +24,7 @@
           v-model="useStream"
           active-text="流式模式"
           inactive-text="完整模式"
-          :disabled="loading"
+          :disabled="true"
       />
       <el-button
           @click="send"
@@ -119,6 +119,7 @@ const scrollToBottom = async () => {
   //margin-left: 50px;
   width: 100%;
   height: 750px;
+  margin-left: 10%;
 
   padding: 16px;
   display: flex;
@@ -127,7 +128,7 @@ const scrollToBottom = async () => {
 }
 
 .chat-window {
-  height: 600px;
+  height: 500px;
   flex: 1;
   overflow-y: auto;
   background: #f4f4f4;

@@ -126,14 +126,6 @@
               </el-icon>
               <span slot="title">订单管理</span>
             </el-menu-item>
-            <el-menu-item index="MisCustomerIm"
-                          v-if="proxy.isAuth(['ROOT', 'CUSTOMER_IM:SELECT'])"
-                          @click="$router.push({ name: 'MisChat' })">
-              <el-icon>
-                <SvgIcon name="im_fill" class="icon-svg" />
-              </el-icon>
-              <span slot="title">智能问诊</span>
-            </el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="体检管理"
                        :popper-class="'site-sidebar--' + sidebar.sidebarLayoutSkin + '-popper'">

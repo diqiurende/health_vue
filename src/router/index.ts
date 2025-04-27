@@ -48,7 +48,17 @@ const routes : Array<RouteRecordRaw> = [
                         path: 'appointment_list',
                         name: 'FrontAppointmentList',
                         component: () => import('../views/front/appointment_list.vue')
-                    }
+                    },
+                    {
+                        path: 'chat',
+                        name: 'MisChat',
+                        component: () => import('../views/front/ChatPanel.vue'),
+                        meta: {
+                            title: '医疗AI机器人',
+                            isTab: true
+                        }
+                    },
+
                 ]
             },
             {
@@ -56,6 +66,7 @@ const routes : Array<RouteRecordRaw> = [
                 name: 'FrontGoodsSnapshot',
                 component: () => import('../views/front/goods_snapshot.vue')
             },
+
         ]
     },
 
@@ -163,15 +174,7 @@ const routes : Array<RouteRecordRaw> = [
                     isTab: true
                 }
             },
-            {
-                path: 'chat',
-                name: 'MisChat',
-                component: () => import('../views/mis/ChatPanel.vue'),
-                meta: {
-                    title: '医疗AI机器人',
-                    isTab: true
-                }
-            },
+
         ]
     },
     {
